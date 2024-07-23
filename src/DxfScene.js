@@ -1032,12 +1032,7 @@ export class DxfScene {
             return
         }
 
-        const style = entity.hatchStyle ?? 0
-
-        if (style != HatchStyle.ODD_PARITY && style != HatchStyle.THROUGH_ENTIRE_AREA) {
-            //XXX other styles not yet supported
-            return
-        }
+        const style = entity.hatchStyle ?? 0;
 
         const boundaryLoops = this._GetHatchBoundaryLoops(entity)
         if (boundaryLoops.length == 0) {
