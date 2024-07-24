@@ -6,8 +6,14 @@ export default function EntityParser() {}
 EntityParser.ForEntityName = 'TEXT';
 
 EntityParser.prototype.parseEntity = function(scanner, curr) {
-    var entity;
-        entity = { type: curr.value };
+    var entity ={ 
+        xScale: 1,
+        rotation: 0,
+        styleName: 'STANDARD',
+        halign: 0,
+        valign: 0
+    }
+        entity.type = curr.value;
     curr = scanner.next();
     while(curr !== 'EOF') {
         if(curr.code === 0) break;
