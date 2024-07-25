@@ -942,7 +942,7 @@ class Batch {
      */
     _GetLineMaterial(key) {
         if (key.lineType == 0 || key.lineType == "") {
-            return three.LineBasicMaterial();
+            return new three.LineBasicMaterial();
         }
         const result = this.lineTypes[key.lineType];
         const lineMaterial = (result.patternLength > 0) ?
