@@ -944,7 +944,7 @@ class Batch {
     _GetLineMaterial(key, color) {
         console.log(this.lineTypes, "lineType list");
         if (key.lineType == 0 || key.lineType == "") {
-            return new three.LineBasicMaterial();
+            return new three.LineBasicMaterial({color: color});
         }
         const result = this.lineTypes.find(el => el.name == key.lineType);
         const lineMaterial = (result.patternLength > 0) ?
