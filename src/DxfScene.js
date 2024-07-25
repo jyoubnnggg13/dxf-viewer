@@ -107,7 +107,7 @@ export class DxfScene {
      */
     async Build(dxf, fontFetchers) {
         const header = dxf.header || {}
-
+        console.log(dxf, "dxf log");        
         for (const [name, value] of Object.entries(header)) {
             if (name.startsWith("$")) {
                 this.vars.set(name.slice(1), value)
