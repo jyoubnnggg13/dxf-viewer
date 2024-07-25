@@ -381,6 +381,9 @@ export class DxfScene {
      * @return {string}
      */
     _GetLineType(entity, vertex = null, blockCtx = null) {
+        if (!entity) {
+            return "";
+        }
         //XXX lookup
         if (entity.lineType.toLowerCase() == 'bylayer') {
             // get type with ltypeindex in layer obj
