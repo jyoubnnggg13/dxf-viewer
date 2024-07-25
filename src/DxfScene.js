@@ -2176,7 +2176,7 @@ export class DxfScene {
         }
 
         for (const lineType of this.lineTypes) {
-            scene.lineTypes.push(lineType);
+            scene.lineTypes.push(lineType[1]);
         }
 
         scene.pointShapeHasDot = (this.pdMode & PdMode.MARK_MASK) === PdMode.DOT
