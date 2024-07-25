@@ -196,6 +196,7 @@ export class DxfViewer {
 
         /* Load all blocks on the first pass. */
         for (const batch of scene.batches) {
+            console.log(batch, 'batch log');
             if (batch.key.blockName !== null &&
                 batch.key.geometryType !== BatchingKey.GeometryType.BLOCK_INSTANCE &&
                 batch.key.geometryType !== BatchingKey.GeometryType.POINT_INSTANCE) {
@@ -836,8 +837,14 @@ class Batch {
             this.key.geometryType === BatchingKey.GeometryType.POINT_INSTANCE ?
                 this.viewer._GetSimplePointMaterial : this.viewer._GetSimpleColorMaterial
 
-        const material = materialFactory.call(this.viewer, this.viewer._TransformColor(color),
-                                              instanceBatch?.GetInstanceType() ?? InstanceType.NONE)
+        const material = !(this.key.geometryType === BatchingKey.GeometryType.LINES || BatchingKey.GeometryType.INDEXED_LINES) ?
+            materialFactory.call(this.viewer, this.viewer._TransformColor(color), instanceBatch?.GetInstanceType() ?? InstanceType.NONE) :
+            new three.LineDashedMaterial({
+                color: this.viewer._TransformColor(color),
+                dashSize: 5,
+                gapSize: 0,
+                linewidth: 3 
+            });
 
         let objConstructor
         switch (this.key.geometryType) {
