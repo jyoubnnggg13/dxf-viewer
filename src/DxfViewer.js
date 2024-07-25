@@ -836,6 +836,7 @@ class Batch {
         const layer = this.layer ?? instanceBatch?.layer
 
         //XXX line type
+        //TODO: define line material type and apply with its patten
         const materialFactory =
             this.key.geometryType === BatchingKey.GeometryType.POINTS ||
             this.key.geometryType === BatchingKey.GeometryType.POINT_INSTANCE ?
@@ -874,7 +875,7 @@ class Batch {
             }
             const obj = new objConstructor(geometry, material)
             if (obj instanceof three.LineSegments) {
-                obj.computeLineDistances();
+                //obj.computeLineDistances();
             }
             obj.frustumCulled = false
             obj.matrixAutoUpdate = false
@@ -940,9 +941,10 @@ class Batch {
     /**
      * 
      * @param {BatchingKey} key 
+     * 
      */
     _GetLineMaterial(key, color) {
-        console.log(this.lineTypes, "lineType list");
+        //lineType is array of linetype from dxf.table.linetype
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial({color: color});
         }
