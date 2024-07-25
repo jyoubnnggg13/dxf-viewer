@@ -381,15 +381,12 @@ export class DxfScene {
      * @return {string}
      */
     _GetLineType(entity, vertex = null, blockCtx = null) {
-        if (!entity) {
-            return "";
-        }
         //XXX lookup
-        if (entity.lineType.toLowerCase() == 'bylayer') {
+        if (entity.lineType && entity.lineType.toLowerCase() == 'bylayer') {
             // get type with ltypeindex in layer obj
             return this.layers.get(entity.layer).lineType;
         }
-        if (entity.lineType.toLowerCase() == 'byblock') {
+        if (entity.lineType && entity.lineType.toLowerCase() == 'byblock') {
             // get type with ltypeindex in block obj
             return "";
         }
