@@ -2148,6 +2148,7 @@ export class DxfScene {
             transforms: new ArrayBuffer(transformsSize),
             batches: [],
             layers: [],
+            lineTypes: [],
             origin: this.origin,
             bounds: this.bounds,
             hasMissingChars: this.hasMissingChars
@@ -2172,6 +2173,10 @@ export class DxfScene {
                 displayName: layer.displayName,
                 color: layer.color
             })
+        }
+
+        for (const lineType of this.lineTypes) {
+            scene.lineTypes.push(lineType);
         }
 
         scene.pointShapeHasDot = (this.pdMode & PdMode.MARK_MASK) === PdMode.DOT
