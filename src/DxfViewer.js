@@ -941,6 +941,9 @@ class Batch {
      * @param {BatchingKey} key 
      */
     _GetLineMaterial(key) {
+        if (key.lineType == 0 || key.lineType == "") {
+            return three.LineBasicMaterial();
+        }
         const result = this.lineTypes[key.lineType];
         const lineMaterial = (result.patternLength > 0) ?
          new three.LineDashedMaterial({scale: 1, dashSize: 3, gapSize: 1}) :
