@@ -184,6 +184,7 @@ export class DxfViewer {
         await this.worker.Destroy()
         this.worker = null
         this.parsedDxf = dxf
+        console.log(scene, "scene obj");
 
         this.origin = scene.origin
         this.bounds = scene.bounds
