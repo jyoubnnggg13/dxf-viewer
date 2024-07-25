@@ -673,6 +673,8 @@ export class DxfViewer {
         }
         return color
     }
+
+
 }
 
 DxfViewer.MessageLevel = MessageLevel
@@ -748,6 +750,7 @@ class Batch {
     constructor(viewer, scene, batch) {
         this.viewer = viewer
         this.key = batch.key
+        this.lineTypes = scene.lineTypes;
 
         if (batch.hasOwnProperty("verticesOffset")) {
             const verticesArray =
@@ -839,12 +842,7 @@ class Batch {
 
         const material = !(this.key.geometryType === BatchingKey.GeometryType.LINES || BatchingKey.GeometryType.INDEXED_LINES) ?
             materialFactory.call(this.viewer, this.viewer._TransformColor(color), instanceBatch?.GetInstanceType() ?? InstanceType.NONE) :
-            new three.LineDashedMaterial({
-                color: this.viewer._TransformColor(color),
-                dashSize: 5,
-                gapSize: 0,
-                linewidth: 3 
-            });
+            this._GetLineMaterial(this.key);
 
         let objConstructor
         switch (this.key.geometryType) {
@@ -874,6 +872,9 @@ class Batch {
                 geometry.setIndex(indices)
             }
             const obj = new objConstructor(geometry, material)
+            if (obj instanceof three.LineSegments) {
+                obj.computeLineDistances();
+            }
             obj.frustumCulled = false
             obj.matrixAutoUpdate = false
             obj._dxfViewerLayer = layer
@@ -933,6 +934,19 @@ class Batch {
             return this.layer ? this.layer.color : 0
         }
         return defColor
+    }
+
+    /**
+     * 
+     * @param {BatchingKey} key 
+     */
+    _GetLineMaterial(key) {
+        const result = this.lineTypes[key.lineType];
+        const lineMaterial = (result.patternLength > 0) ?
+         new three.LineDashedMaterial({scale: 1, dashSize: 3, gapSize: 1}) :
+         new three.LineBasicMaterial();
+        
+        return lineMaterial;
     }
 }
 
