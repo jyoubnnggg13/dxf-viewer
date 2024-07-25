@@ -88,6 +88,8 @@ export class DxfScene {
         this.blocks = new Map()
         /** Indexed by dimension style name, value is DIMSTYLE object from parsed DXF. */
         this.dimStyles = new Map()
+        /* Indexed by line type name, value is lineType object from parsed DXF. */
+        this.lineTypes = new Map();
         /** Indexed by variable name (without leading '$'). */
         this.vars = new Map()
         this.fontStyles = new Map()
@@ -138,6 +140,12 @@ export class DxfScene {
         if (dxf.tables && dxf.tables.style) {
             for (const [, style] of Object.entries(dxf.tables.style.styles)) {
                 this.fontStyles.set(style.styleName, style);
+            }
+        }
+
+        if (dxf.tables && dxf.tables.lineType) {
+            for (const [key, ltype] of Object.entries(dxf.tables.lineType.lineTypes)) {
+                this.lineStyles.set(key, ltype);
             }
         }
 
@@ -370,11 +378,22 @@ export class DxfScene {
      * @param entity
      * @param vertex
      * @param blockCtx {?BlockContext}
-     * @return {number}
+     * @return {string}
      */
     _GetLineType(entity, vertex = null, blockCtx = null) {
         //XXX lookup
-        return 0
+        if (entity.lineType.toLowerCase() == 'bylayer') {
+            // get type with ltypeindex in layer obj
+        }
+        if (entity.lineType.toLowerCase() == 'byblock') {
+            // get type with ltypeindex in block obj
+            
+        }
+        if (entity.type == "LINE") {
+            return entity.lineType;
+        }else{
+            return "";
+        }
     }
 
     /** Check if start/end with are not specified. */
