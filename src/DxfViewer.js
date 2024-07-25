@@ -946,7 +946,7 @@ class Batch {
     _GetLineMaterial(key, color) {
         //lineType is array of linetype from dxf.table.linetype
         if (key.lineType == 0 || key.lineType == "") {
-            return new three.LineBasicMaterial({color: color});
+            return new three.LineBasicMaterial();
         }
         const result = this.lineTypes.find(el => el.name == key.lineType);
         const lineMaterial = (result.patternLength > 0) ?
