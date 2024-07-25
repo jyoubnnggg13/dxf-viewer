@@ -946,7 +946,7 @@ class Batch {
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial();
         }
-        const result = this.lineTypes[key.lineType];
+        const result = this.lineTypes.find(el => el.name == key.lineType);
         const lineMaterial = (result.patternLength > 0) ?
          new three.LineDashedMaterial({scale: 1, dashSize: 3, gapSize: 1}) :
          new three.LineBasicMaterial();
