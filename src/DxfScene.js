@@ -145,7 +145,7 @@ export class DxfScene {
 
         if (dxf.tables && dxf.tables.lineType) {
             for (const [key, ltype] of Object.entries(dxf.tables.lineType.lineTypes)) {
-                this.lineStyles.set(key, ltype);
+                this.lineTypes.set(key, ltype);
             }
         }
 
@@ -384,17 +384,17 @@ export class DxfScene {
         //XXX lookup
         if (entity.lineType.toLowerCase() == 'bylayer') {
             // get type with ltypeindex in layer obj
-
+            return this.layers.get(entity.layer).lineType;
         }
         if (entity.lineType.toLowerCase() == 'byblock') {
             // get type with ltypeindex in block obj
-            
+            return "";
         }
         if (entity.type == "LINE") {
             return entity.lineType;
         }else{
         }
-        return 0;
+        return "";
     }
 
     /** Check if start/end with are not specified. */
@@ -2601,10 +2601,10 @@ export class Entity {
      * @param indices {?number[]} Indices for indexed geometry.
      * @param layer {?string}
      * @param color {number}
-     * @param lineType {?number}
+     * @param lineType {?string}
      * @param shape {Boolean} true if closed shape.
      */
-    constructor({type, vertices, indices = null, layer = null, color, lineType = 0, shape = false}) {
+    constructor({type, vertices, indices = null, layer = null, color, lineType = "", shape = false}) {
         this.type = type
         this.vertices = vertices
         this.indices = indices
