@@ -384,6 +384,7 @@ export class DxfScene {
         //XXX lookup
         if (entity.lineType.toLowerCase() == 'bylayer') {
             // get type with ltypeindex in layer obj
+
         }
         if (entity.lineType.toLowerCase() == 'byblock') {
             // get type with ltypeindex in block obj
@@ -392,8 +393,8 @@ export class DxfScene {
         if (entity.type == "LINE") {
             return entity.lineType;
         }else{
-            return "";
         }
+        return 0;
     }
 
     /** Check if start/end with are not specified. */
