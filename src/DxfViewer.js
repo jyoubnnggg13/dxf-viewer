@@ -941,6 +941,7 @@ class Batch {
      * @param {BatchingKey} key 
      */
     _GetLineMaterial(key) {
+        console.log(this.lineTypes, "lineType list");
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial();
         }
