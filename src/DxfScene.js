@@ -283,6 +283,9 @@ export class DxfScene {
     }
 
     _ProcessDxfEntity(entity, blockCtx = null) {
+        console.log(entity, "entity");
+        if (blockCtx) { console.log(blockCtx, "block context") };
+        console.log("================================================")
         let renderEntities
         switch (entity.type) {
         case "LINE":
@@ -1373,7 +1376,7 @@ export class DxfScene {
 
         return result
     }
-
+    
     _GetDimStyleValue(valueName, entity, style) {
         const entries = entity?.xdata?.ACAD?.DSTYLE?.values
         if (entries) {
