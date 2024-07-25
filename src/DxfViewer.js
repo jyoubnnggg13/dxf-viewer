@@ -843,7 +843,7 @@ class Batch {
 
         const material = !(this.key.geometryType === BatchingKey.GeometryType.LINES || BatchingKey.GeometryType.INDEXED_LINES) ?
             materialFactory.call(this.viewer, this.viewer._TransformColor(color), instanceBatch?.GetInstanceType() ?? InstanceType.NONE) :
-            this._GetLineMaterial(this.key);
+            this._GetLineMaterial(this.key, this.viewer._TransformColor(color));
 
         let objConstructor
         switch (this.key.geometryType) {
@@ -941,15 +941,15 @@ class Batch {
      * 
      * @param {BatchingKey} key 
      */
-    _GetLineMaterial(key) {
+    _GetLineMaterial(key, color) {
         console.log(this.lineTypes, "lineType list");
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial();
         }
         const result = this.lineTypes.find(el => el.name == key.lineType);
         const lineMaterial = (result.patternLength > 0) ?
-         new three.LineDashedMaterial({scale: 1, dashSize: 3, gapSize: 1}) :
-         new three.LineBasicMaterial();
+         new three.LineDashedMaterial({scale: 1, dashSize: 3, gapSize: 1, color: color}) :
+         new three.LineBasicMaterial({color: color});
         
         return lineMaterial;
     }
