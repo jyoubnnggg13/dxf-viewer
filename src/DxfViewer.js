@@ -61,6 +61,8 @@ export class DxfViewer {
 
         this.simpleColorMaterial = []
         this.simplePointMaterial = []
+        this.lineMaterial = this._CreateLineMaterial();
+        
         for (let i = 0; i < InstanceType.MAX; i++) {
             this.simpleColorMaterial[i] = this._CreateSimpleColorMaterial(i)
             this.simplePointMaterial[i] = this._CreateSimplePointMaterial(i)
@@ -562,6 +564,47 @@ export class DxfViewer {
         })
     }
 
+    _CreateLineMaterial() {
+        const shaders = this._GenerateShaders(InstanceType.LINE, true);
+        return new three.RawShaderMaterial({
+            uniforms: {
+                color: {
+                    value: new three.Color(0xff00ff)
+                },
+                dotSize: {
+                    value: 0
+                },
+                dashSize: {
+                    value: 0
+                },
+                gapSize: {
+                    value: 0
+                },
+            },
+            vertexShader: shaders.vertex,
+            fragmentShader: shaders.fragment,
+            depthTest: false,
+            depthWrite: false,
+            glslVersion: three.GLSL3
+        })
+    }
+
+    /** @param color {number} Color RGB numeric value.
+     * @param instanceType {number}
+     * @param lineType {lineType} 
+     */
+    _CreateLineMaterialInstance(color, lineType) {
+        const src = this.lineMaterial;
+        /* Should reuse compiled shaders. */
+        const m = src.clone()
+        m.uniforms.color = { value: new three.Color(color) }
+        /* Define pattern for line */
+        m.uniforms.dashSize = { value: lineType[0] },
+        m.uniforms.gapSize = { value: lineType[1] },
+        m.uniforms.dotSize = { value: lineType[2] ?? lineType[2] }
+        return m
+    }
+
     /** @param color {number} Color RGB numeric value.
      * @param size {number} Rasterized point size in pixels.
      * @param instanceType {number}
@@ -602,6 +645,25 @@ export class DxfViewer {
         const pointSizeUniform = pointSize ? "uniform float pointSize;" : ""
         const pointSizeAssigment = pointSize ? "gl_PointSize = pointSize;" : ""
 
+        const lineAttr = instanceType === InstanceType.LINE ?
+            `
+            uniform float dashSize;
+            uniform float gapSize;
+            uniform float dotSize;
+            const float vLineDistance;
+            ` : "";
+        
+        const lineFragment = instanceType === InstanceType.LINE ?
+            `
+            vLineDistance = dashSize;
+            float totalSize = dashSize + gapSize;
+            float modulo = mod( vLineDistance, totalSize );
+            float dotDistance = dashSize + ( gapSize * .5 ) - ( dotSize * .5 );
+            if( modulo > dashSize && mod(modulo, dotDistance) > dotSize ) {
+                discard;
+            }
+            `: "";
+
         return {
             vertex: `
 
@@ -628,9 +690,11 @@ export class DxfViewer {
             precision highp int;
             uniform vec3 color;
             out vec4 fragColor;
+            ${lineAttr}
 
             void main() {
                 fragColor = vec4(color, 1.0);
+                ${lineFragment}
             }
             `
         }
@@ -737,9 +801,11 @@ const InstanceType = Object.freeze({
     FULL: 1,
     /** Point instances, 2D-translation vector per instance. */
     POINT: 2,
+    /** Line instances */
+    LINE: 3,
 
     /** Number of types. */
-    MAX: 3
+    MAX: 4
 })
 
 class Batch {
@@ -844,6 +910,7 @@ class Batch {
         const material = !(this.key.geometryType === BatchingKey.GeometryType.LINES || BatchingKey.GeometryType.INDEXED_LINES) ?
             materialFactory.call(this.viewer, this.viewer._TransformColor(color), instanceBatch?.GetInstanceType() ?? InstanceType.NONE) :
             this._GetLineMaterial(this.key, this.viewer._TransformColor(color));
+        
 
         let objConstructor
         switch (this.key.geometryType) {
@@ -938,18 +1005,19 @@ class Batch {
     }
 
     /**
-     * 
      * @param {BatchingKey} key 
      */
     _GetLineMaterial(key, color) {
         console.log(this.lineTypes, "lineType list");
+        const mat = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), this.lineTypes);
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial({color: color});
         }
         const result = this.lineTypes.find(el => el.name == key.lineType);
-        const lineMaterial = (result.patternLength > 0) ?
-         new three.LineDashedMaterial({scale: 1, dashSize: 3, gapSize: 1, color: color}) :
-         new three.LineBasicMaterial({color: color});
+        if (result.patternLength < 2) {
+            return new three.LineBasicMaterial({color: color});
+        }
+        const lineMaterial = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), this.lineTypes);
         
         return lineMaterial;
     }
