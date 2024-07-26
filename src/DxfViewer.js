@@ -62,7 +62,7 @@ export class DxfViewer {
         this.simpleColorMaterial = []
         this.simplePointMaterial = []
         this.lineMaterial = this._CreateLineMaterial();
-        
+
         for (let i = 0; i < InstanceType.MAX; i++) {
             this.simpleColorMaterial[i] = this._CreateSimpleColorMaterial(i)
             this.simplePointMaterial[i] = this._CreateSimplePointMaterial(i)
@@ -650,7 +650,7 @@ export class DxfViewer {
             uniform float dashSize;
             uniform float gapSize;
             uniform float dotSize;
-            const float vLineDistance;
+            float vLineDistance;
             ` : "";
         
         const lineFragment = instanceType === InstanceType.LINE ?
