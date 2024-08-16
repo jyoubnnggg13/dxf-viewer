@@ -1027,7 +1027,6 @@ class Batch {
      */
     _GetLineMaterial(key, color) {
         console.log(this.lineTypes, "lineType list");
-        console.log(color, "color");
         const mat = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), this.lineTypes);
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial({color: color});
@@ -1036,6 +1035,7 @@ class Batch {
         if (result.patternLength < 2) {
             return new three.LineBasicMaterial({color: color});
         }
+        console.log(result, 'line info');
         const lineMaterial = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), result);
         
         return lineMaterial;
