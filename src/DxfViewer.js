@@ -932,6 +932,7 @@ class Batch {
         }
 
         function CreateObject(vertices, indices) {
+            console.log(vertices, 'vertices');
             const geometry = instanceBatch ?
                 new three.InstancedBufferGeometry() : new three.BufferGeometry()
             geometry.setAttribute("position", vertices)
