@@ -666,8 +666,6 @@ export class DxfViewer {
         const lineFragment = instanceType === InstanceType.LINE ?
             `
             vec2 uv = vUv*scale;
-            
-            float scale = 20.0;
             uv *= scale;
 
             float modulo = mod(uv.x, totalPattern);
