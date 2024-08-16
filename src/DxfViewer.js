@@ -1020,7 +1020,7 @@ class Batch {
         if (result.patternLength < 2) {
             return new three.LineBasicMaterial({color: color});
         }
-        const lineMaterial = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), this.lineTypes);
+        const lineMaterial = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor('#a172c6'), this.lineTypes);
         
         return lineMaterial;
     }
