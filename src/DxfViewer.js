@@ -604,9 +604,11 @@ export class DxfViewer {
         const m = src.clone()
         m.uniforms.color = { value: new three.Color(color) }
         /* Define pattern for line */
-        m.uniforms.dashSize = { value: lineType[0] },
-        m.uniforms.gapSize = { value: lineType[1] },
-        m.uniforms.dotSize = { value: lineType[2] ?? lineType[2] }
+        m.uniforms.dashSize = { value: lineType.pattern[0] },
+        m.uniforms.gapSize = { value: lineType.pattern[1] },
+        m.uniforms.dotSize = { value: lineType.pattern[2] ?? lineType.pattern[2] }
+        m.uniforms.totalPattern = { value: lineType.patternLength }
+        m.uniforms.scale = { value: 20 }
         return m
     }
 
@@ -656,14 +658,15 @@ export class DxfViewer {
             uniform float gapSize;
             uniform float dotSize;
             uniform float totalPattern;
+            uniform float scale;
+            varying vec2 vUv;
+
             ` : "";
         
         const lineFragment = instanceType === InstanceType.LINE ?
             `
-            // 현재 픽셀의 좌표를 그대로 사용
-            vec2 uv = gl_FragCoord.xy;
+            vec2 uv = vUv*scale;
             
-            // 패턴의 스케일 조정
             float scale = 20.0;
             uv *= scale;
 
@@ -682,6 +685,7 @@ export class DxfViewer {
             precision highp float;
             precision highp int;
             in vec2 position;
+            varying vec2 vUv;
             ${fullInstanceAttr}
             ${pointInstanceAttr}
             uniform mat4 modelViewMatrix;
@@ -689,6 +693,7 @@ export class DxfViewer {
             ${pointSizeUniform}
 
             void main() {
+                vUv = uv;
                 vec4 pos = vec4(position, 0.0, 1.0);
                 ${fullInstanceTransform}
                 ${pointInstanceTransform}
@@ -1031,7 +1036,7 @@ class Batch {
         if (result.patternLength < 2) {
             return new three.LineBasicMaterial({color: color});
         }
-        const lineMaterial = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), this.lineTypes);
+        const lineMaterial = this.viewer._CreateLineMaterialInstance(this.viewer._TransformColor(color), result);
         
         return lineMaterial;
     }
