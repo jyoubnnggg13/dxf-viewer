@@ -391,6 +391,8 @@ export class DxfScene {
         }
         if (!entity.lineType) {
             // get type with ltypeindex in block obj
+            console.log('no linetype');
+            console.log('auto detect : ', this.layers.get(entity.layer).lineType);
             return this.layers.get(entity.layer).lineType;
         }
         if (entity.type == "LINE") {
