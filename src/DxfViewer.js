@@ -659,7 +659,7 @@ export class DxfViewer {
             uniform float dotSize;
             uniform float totalPattern;
             uniform float scale;
-            varying vec2 vUv;
+            in vec2 vUv;
 
             ` : "";
         
@@ -685,7 +685,7 @@ export class DxfViewer {
             precision highp float;
             precision highp int;
             in vec2 position;
-            varying vec2 vUv;
+            out vec2 vUv;
             ${fullInstanceAttr}
             ${pointInstanceAttr}
             uniform mat4 modelViewMatrix;
