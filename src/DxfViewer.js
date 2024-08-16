@@ -582,6 +582,9 @@ export class DxfViewer {
                 gapSize: {
                     value: 6.5
                 },
+                totalPattern: {
+                    value: 31
+                }
             },
             vertexShader: shaders.vertex,
             fragmentShader: shaders.fragment,
