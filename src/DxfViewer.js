@@ -609,6 +609,7 @@ export class DxfViewer {
         m.uniforms.dotSize = { value: lineType.pattern[2] ?? lineType.pattern[2] }
         m.uniforms.totalPattern = { value: lineType.patternLength }
         m.uniforms.scale = { value: 20 }
+        console.log(m, 'custom line material');
         return m
     }
 
