@@ -958,9 +958,9 @@ class Batch {
                 geometry.setIndex(indices)
             }
             const obj = new objConstructor(geometry, material)
-            if (obj instanceof three.LineSegments) {
-                geometry.setAttribute("lineDistance", obj.computeLineDistances());
-            }
+            // if (obj instanceof three.LineSegments) {
+            //     geometry.setAttribute("lineDistance", obj.computeLineDistances());
+            // }
             obj.frustumCulled = false
             obj.matrixAutoUpdate = false
             obj._dxfViewerLayer = layer
@@ -1027,6 +1027,9 @@ class Batch {
      */
     _GetLineMaterial(key, color) {
         console.log(this.lineTypes, "lineType list");
+        if (key.layerName == '중') {
+            console.log(key, '중심선');
+        }
         const result = this.lineTypes.find(el => el.name == key.lineType);
         
         if (key.lineType == 0 || key.lineType == "") {
