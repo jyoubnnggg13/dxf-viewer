@@ -656,12 +656,16 @@ export class DxfViewer {
             uniform float gapSize;
             uniform float dotSize;
             uniform float totalPattern;
-            uniform vec2 resolution;
             ` : "";
         
         const lineFragment = instanceType === InstanceType.LINE ?
             `
-            vec2 uv = gl_FragCoord.xy/resolution;
+            // 현재 픽셀의 좌표를 그대로 사용
+            vec2 uv = gl_FragCoord.xy;
+            
+            // 패턴의 스케일 조정
+            float scale = 20.0;
+            uv *= scale;
 
             float modulo = mod(uv.x, totalPattern);
 
