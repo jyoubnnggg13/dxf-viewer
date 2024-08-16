@@ -473,7 +473,7 @@ export class DxfViewer {
 
     _LoadBatch(scene, batch) {
         if (batch.key.lineType != 0 && batch.key.lineType != '' && batch.key.lineType != 'Continuous') {
-        console.log(batch, 'batch');
+            // console.log(batch, 'batch');
         }
         if (batch.key.blockName !== null &&
             batch.key.geometryType !== BatchingKey.GeometryType.BLOCK_INSTANCE &&
@@ -949,7 +949,7 @@ class Batch {
         }
 
         function CreateObject(vertices, indices) {
-            console.log(vertices, 'vertices');
+            // console.log(vertices, 'vertices');
             const geometry = instanceBatch ?
                 new three.InstancedBufferGeometry() : new three.BufferGeometry()
             geometry.setAttribute("position", vertices)
@@ -959,7 +959,7 @@ class Batch {
             }
             const obj = new objConstructor(geometry, material)
             if (obj instanceof three.LineSegments) {
-                obj.computeLineDistances();
+                geometry.setAttribute("lineDistance", obj.computeLineDistances());
             }
             obj.frustumCulled = false
             obj.matrixAutoUpdate = false
