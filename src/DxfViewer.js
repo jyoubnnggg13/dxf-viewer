@@ -656,11 +656,14 @@ export class DxfViewer {
             uniform float gapSize;
             uniform float dotSize;
             uniform float totalPattern;
+            uniform vec2 resolution;
             ` : "";
         
         const lineFragment = instanceType === InstanceType.LINE ?
             `
-            float modulo = mod(gl_FragCoord.xy, totalPattern);
+            vec2 uv = gl_FragCoord.xy/resolution;
+
+            float modulo = mod(uv.x, totalPattern);
 
             bool isLongLine = modulo < dashSize;
             bool isShortLine = (modulo > (dashSize + gapSize)) && 
