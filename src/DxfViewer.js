@@ -1028,11 +1028,12 @@ class Batch {
     _GetLineMaterial(key, color) {
         console.log(this.lineTypes, "lineType list");
         console.log(key, "key");
+        const result = this.lineTypes.find(el => el.name == key.lineType);
+        
         if (key.lineType == 0 || key.lineType == "") {
             return new three.LineBasicMaterial({color: color});
         }
-        const result = this.lineTypes.find(el => el.name == key.lineType);
-        if (result.pattern.length < 2) {
+        if (!result.pattern || result.pattern.length < 2) {
             return new three.LineBasicMaterial({color: color});
         }
         console.log(result, 'line info');
