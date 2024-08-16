@@ -574,13 +574,13 @@ export class DxfViewer {
                     value: new three.Color(0xff00ff)
                 },
                 dotSize: {
-                    value: 0
+                    value: 6.5
                 },
                 dashSize: {
-                    value: 0
+                    value: 18
                 },
                 gapSize: {
-                    value: 0
+                    value: 6.5
                 },
             },
             vertexShader: shaders.vertex,
@@ -647,23 +647,24 @@ export class DxfViewer {
         const pointSizeUniform = pointSize ? "uniform float pointSize;" : ""
         const pointSizeAssigment = pointSize ? "gl_PointSize = pointSize;" : ""
 
-        const lineAttr = instanceType === InstanceType.LINE ?
+        const lineFragAttr = instanceType === InstanceType.LINE ?
             `
             uniform float dashSize;
             uniform float gapSize;
             uniform float dotSize;
-            float vLineDistance;
+            uniform float totalPattern;
             ` : "";
         
         const lineFragment = instanceType === InstanceType.LINE ?
-            `
-            vLineDistance = dashSize;
-            float totalSize = dashSize + gapSize;
-            float modulo = mod( vLineDistance, totalSize );
-            float dotDistance = dashSize + ( gapSize * .5 ) - ( dotSize * .5 );
-            if( modulo > dashSize && mod(modulo, dotDistance) > dotSize ) {
-                discard;
-            }
+            ` x - y * fl(x/y)
+
+            float modulo = mod(gl_fragcoord.xy, totalPattern);
+
+            bool isLongLine = modulo < dashSize;
+            bool isShortLine = (modulo > (dashSize + gapSize)) && 
+                                (modulo < (dashSize + gapSize + dotSize));
+
+            if(!isLongLine && !isShortLine) { discard; }
             `: "";
 
         return {
@@ -692,7 +693,7 @@ export class DxfViewer {
             precision highp int;
             uniform vec3 color;
             out vec4 fragColor;
-            ${lineAttr}
+            ${lineFragAttr}
 
             void main() {
                 fragColor = vec4(color, 1.0);
