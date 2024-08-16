@@ -659,8 +659,7 @@ export class DxfViewer {
             ` : "";
         
         const lineFragment = instanceType === InstanceType.LINE ?
-            ` x - y * fl(x/y)
-
+            `
             float modulo = mod(gl_fragcoord.xy, totalPattern);
 
             bool isLongLine = modulo < dashSize;
