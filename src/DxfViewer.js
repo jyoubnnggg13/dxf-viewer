@@ -199,9 +199,6 @@ export class DxfViewer {
 
         /* Load all blocks on the first pass. */
         for (const batch of scene.batches) {
-            if (batch.key.lineType != '' && batch.key.lineType != 0) {
-            console.log(batch, 'batch log');
-            }
             if (batch.key.blockName !== null &&
                 batch.key.geometryType !== BatchingKey.GeometryType.BLOCK_INSTANCE &&
                 batch.key.geometryType !== BatchingKey.GeometryType.POINT_INSTANCE) {
@@ -475,6 +472,7 @@ export class DxfViewer {
     }
 
     _LoadBatch(scene, batch) {
+        console.log(batch, 'batch');
         if (batch.key.blockName !== null &&
             batch.key.geometryType !== BatchingKey.GeometryType.BLOCK_INSTANCE &&
             batch.key.geometryType !== BatchingKey.GeometryType.POINT_INSTANCE) {
