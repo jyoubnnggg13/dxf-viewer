@@ -685,6 +685,7 @@ export class DxfViewer {
             precision highp float;
             precision highp int;
             in vec2 position;
+            in vec2 uv;
             out vec2 vUv;
             ${fullInstanceAttr}
             ${pointInstanceAttr}
