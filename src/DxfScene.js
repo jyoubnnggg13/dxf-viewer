@@ -291,8 +291,8 @@ export class DxfScene {
     }
 
     _ProcessDxfEntity(entity, blockCtx = null) {
-        if (blockCtx) { console.log(blockCtx, "block context") };
-        console.log("================================================")
+        // if (blockCtx) { console.log(blockCtx, "block context") };
+        // console.log("================================================")
         let renderEntities
         switch (entity.type) {
         case "LINE":
