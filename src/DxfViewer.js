@@ -472,7 +472,9 @@ export class DxfViewer {
     }
 
     _LoadBatch(scene, batch) {
+        if (batch.key.lineType != 0 && batch.key.lineType != '' && batch.key.lineType != 'Continuous') {
         console.log(batch, 'batch');
+        }
         if (batch.key.blockName !== null &&
             batch.key.geometryType !== BatchingKey.GeometryType.BLOCK_INSTANCE &&
             batch.key.geometryType !== BatchingKey.GeometryType.POINT_INSTANCE) {
